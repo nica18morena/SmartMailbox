@@ -8,19 +8,19 @@ TI SensorTag -> Mobile phone as a gateway using EvoThings -> AWS: DynamoDB, Lamb
 Firebase -> Android phone app
 
 Prerequisites: 
-1. Evothings workbench: https://evothings.com/download/ and Evothings Viewer app
-2. from Google play store (only available on Android)
-3. TI Sensortag
+1. Evothings workbench: https://evothings.com/download/ and Evothings Viewer app from Google play store (only available on Android)
+2. TI Sensortag
  
 How to run:
-1. Pull the repository. 2. Connect to Evothings workbench through Evothings viewer app  
+1. Pull the repository
+2. Connect to Evothings workbench through Evothings viewer app  
 3. Drag the Index.html file from SmartMailbox\Index.html onto 
 the My Apps section of Evothings workbench and select run
-4. Start the sensor. 5. Connect the sensor to the Evothings viewer app
+4. Start the sensor. 
+5. Connect the sensor to the Evothings viewer app
 
 For any questions about this project or files within please conatact either Jessica or 
 Swetha. 
 
-Jessica E-mail: jess2018@uw.edu
-Swetha  E-mail: stahtews@gmail.com
+Jessica E-mail: jess2018@uw.edu, Swetha  E-mail: stahtews@gmail.com
 
