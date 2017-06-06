@@ -11,7 +11,7 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
 	<title>SmartMailBox Data Collection App</title>
-
+	
 	<style>
 	@import 'ui/css/evothings-app.css';
 	</style>
@@ -27,18 +27,19 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 		<button class="back" onclick="history.back()">
 			<img src="ui/images/arrow-left.svg" />
 		</button>
-		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+		<!--<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />-->
+		<img class="logotype" src="ui/images/Title.png" alt="Evothings" />
 	</header>
 
-	<h1>AWS Lambda TI SensorTag IoT Demo</h1>
+	<h1>Configure SensorTag</h1>
 
 
     <form>
-		email:
-		<input type="text" id="phoneNumber" value="stahtews@gmail.com"  style="border:1px solid #ff0000" />
+		Email:
+		<input type="email" id="phoneNumber" value="stahtews@gmail.com"  style="border:1px solid #ff0000" />
 		
     </form>
-	<button class="green wide" onclick="connectToSensorTag()">
+	<button class="red wide" onclick="connectToSensorTag()">
 		Start reading SensorTag
 	</button>
 	<button class="stone wide" onclick="disconnectFromSensorTag()">
@@ -47,12 +48,12 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 
 	<p><strong>Status:</strong> <span id="status">Click the activate button on the SensorTag and tap the Start button to begin</span></p>
 
-	<p><strong>Instructions:</strong></p>
+	<!--<p><strong>Instructions:</strong></p>
 
 	<p>This app demonstrates how to upload data from a Texas Instruments Bluetooth Smart SensorTag to the Amazon AWS Lambda service.</p>
 	<p>Edit the source code of file aws-config.js to use your AWS credentials. See the README file for further information.</p>
 	<p>When ready to go, activate the SensorTag and press the Start button to connect and start uploading sensor data.</p>
-	<p>To monitor temperature data, run the example app 'aws-app-read.html' on another phone.</p>
+	<p>To monitor temperature data, run the example app 'aws-app-read.html' on another phone.</p>-->
 
 	<script src="cordova.js"></script>
 	<script src="libs/evothings/evothings.js"></script>
@@ -67,11 +68,11 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 
 	// Update interval is once each minute. You can make
 	// this value smaller to get more frequent updates.
-	var temperatureInterval = 1000 // Change to 5000 for 5 second intervals.
+	//var temperatureInterval = 1000 // Change to 5000 for 5 second intervals.
 	var accelerometerInterval = 1000
 
 	// Timer for temperature upload.
-	var temperatureTimer = null
+	//var temperatureTimer = null
 	var accelerometerTimer = null
 
 	// Variable that holds last known temperature reading.
@@ -79,6 +80,10 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 	var lastAccelerometerReadingx = '0.0'
 	var lastAccelerometerReadingz = '0.0'
 
+	/****************************
+	** Initialize the application
+	**
+	*****************************/
 	function initialise()
 	{
 		initialiseSensorTag()
@@ -87,22 +92,12 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 
 	function initializeAWS()
 	{
-		// TODO: Update aws-config.js with your access keys.
 		evothings.aws.initialize(evothings.aws.config)
 	}
 
-	function edValueKeyPress()
-    {
-	
-
-	}
-
-
-
 
 	function initialiseSensorTag()
-	{
-		// Create SensorTag CC2650 instance.
+	{	// Create SensorTag CC2650 instance.
 		sensortag = evothings.tisensortag.createInstance(
 			evothings.tisensortag.CC2650_BLUETOOTH_SMART)
 
@@ -115,18 +110,20 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 		// a workaround. See function onTemperatureTimer.
 
 		//it contains callback function , hence when the sensor sends data, it will directly go to call back function temperatureHandler
-		sensortag
+		/*sensortag
 			.statusCallback(statusHandler)
 			.errorCallback(errorHandler)
-			.temperatureCallback(temperatureHandler, temperatureInterval)
+			.temperatureCallback(temperatureHandler, temperatureInterval)*/
 
 			
 	
-          hyper.log('Hello World'+ sensortag.isAccelerometerAvailable())
+          hyper.log('Accelerometer available: '+ sensortag.isAccelerometerAvailable())
           //console.log('\n Accelerometer: ' + sensortag.isAccelerometerAvailable())
             sensortag
+				.statusCallback(statusHandler)
+				.errorCallback(errorHandler)
 				.accelerometerCallback(accelerometerHandler,accelerometerInterval)
-                 .accelerometerOn();
+                //.accelerometerOn();
 
 
 
@@ -134,16 +131,17 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 
 	function connectToSensorTag()
 	{
+		disconnectFromSensorTag()
 		// Connect to the nearest SensorTag.
 		sensortag.connectToNearestDevice()
 
 		// Clear existing interval timer if any.
-		temperatureTimer && clearInterval(temperatureTimer)
+		//temperatureTimer && clearInterval(temperatureTimer)
 		accelerometerTimer && clearInterval(accelerometerTimer)
 
 		// Start the interval timer for uploading data. This is a
 		// workaround for the SensorTag interval setting.
-		temperatureTimer = setInterval(onTemperatureTimer, temperatureInterval)
+		//temperatureTimer = setInterval(onTemperatureTimer, temperatureInterval)
 		accelerometerTimer = setInterval(onAccelerometerTimer, accelerometerInterval)
 		
 
@@ -157,14 +155,14 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 		sensortag.disconnectDevice()
 
 		// Clear interval timer.
-		temperatureTimer && clearInterval(temperatureTimer)
-		temperatureTimer = null
+		/*temperatureTimer && clearInterval(temperatureTimer)
+		temperatureTimer = null*/
 
 		accelerometerTimer && clearInterval(accelerometerTimer)
 		accelerometerTimer =null
 
 		// Update status message.
-		displayMessage('Temperature and accelerometer reading stopped')
+		displayMessage('Disconnected')
 	}
 
 	function temperatureHandler(data)
@@ -183,9 +181,6 @@ IoT app for the SmartMailBox that uses the AWS Lambda API.
 	
 	}
 
-
-
-  
 function handleReply(data)
 {
 	hyper.log('Accelerometer: ' + 
@@ -211,7 +206,6 @@ function handleReply(data)
 
 hyper.log('inAccelerometerHandlerlater'+lastAccelerometerReadingx+' '+lastAccelerometerReadingz)
 
-
   }
 
 function getAccelerometerValues(data){
@@ -234,23 +228,23 @@ hyper.log('GetAccelerometer: ' +
 
 
 
-	function onTemperatureTimer()
+	/*function onTemperatureTimer()
 	{
 		var temperature = lastTemperatureReading
 
 		function successCallback()
 		{
-			displayMessage('Written temperature FROM ONTemperatureTimerSuccessCallBack: ' + temperature)
+			//displayMessage('Written temperature FROM ONTemperatureTimerSuccessCallBack: ' + temperature)
 		}
 
 		function errorCallback(error)
 		{
-			displayMessage('Write error: ' + JSON.stringify(error))
+			//displayMessage('Write error: ' + JSON.stringify(error))
 		}
 
 		// Write the temperature value to the AWS Lambda cloud.
-		displayMessage('Writing temperature...From ONTemperatureTimerDisplayMesaage')
-		}
+		//displayMessage('Writing temperature...From ONTemperatureTimerDisplayMesaage')
+		}*/
 
 	function onAccelerometerTimer()
 	{
@@ -260,7 +254,8 @@ hyper.log('GetAccelerometer: ' +
 		function successCallback()
 		
 		{
-			displayMessage('Written accelerometer: ' + accelerometerx+' '+accelerometerz)
+			//displayMessage('Written accelerometer: ' + accelerometerx+' '+accelerometerz)
+			displayMessage('Connected')
 		}
 
 		function errorCallback(error)
@@ -272,9 +267,9 @@ hyper.log('GetAccelerometer: ' +
 
         var phoneNo = document.forms[0].elements[0].value
 
-		displayMessage('Writing AccelerometerData...' + typeof(phoneNo))
+		//displayMessage('Writing AccelerometerData...' + typeof(phoneNo))
 		//var ph = parseInt(phoneNo)
-		displayMessage('Type of phoneNo is' + typeof(phoneNo)+'Type of ph is '+  'type of accelerometerxz is '+ typeof(accelerometerx)+typeof(accelerometerz))
+		//displayMessage('Type of phoneNo is' + typeof(phoneNo)+'Type of ph is '+  'type of accelerometerxz is '+ typeof(accelerometerx)+typeof(accelerometerz))
     	
 		
 		evothings.aws.update(phoneNo, accelerometerx,accelerometerz, successCallback, errorCallback)
